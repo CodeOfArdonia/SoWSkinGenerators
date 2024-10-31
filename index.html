@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Ardoni Skin Generator</title>
+    <script src="index.js" type="module"></script>
+    <style>
+        #canvas {
+            border: 1px solid black;
+            image-rendering: pixelated;
+        }
+
+        .color-picker {
+            margin: 10px;
+        }
+    </style>
+</head>
+
+<body style="text-align: center;">
+    <h1>Ardoni Skin Generator</h1>
+    <br>
+    <div>
+        <div style="display: inline-flex;">
+            <div>
+                <label>
+                    <input id="age_1" type="radio" name="age" checked>
+                    0-50
+                </label>
+            </div>
+            <div>
+                <label>
+                    <input id="age_2" type="radio" name="age">
+                    50-100
+                </label>
+            </div>
+            <div>
+                <label>
+                    <input id="age_3" type="radio" name="age">
+                    100-150
+                </label>
+            </div>
+            <div>
+                <label>
+                    <input id="age_4" type="radio" name="age">
+                    150-200
+                </label>
+            </div>
+            <div>
+                <label>
+                    <input id="age_5" type="radio" name="age">
+                    200-250
+                </label>
+            </div>
+        </div>
+        <div>
+            <label>
+                <input id="female" type="checkbox">
+                Female
+            </label>
+        </div>
+        <div>
+            <label>
+                Seed:&nbsp;
+                <input id="seed" type="text" value="0">
+                <button onclick="randomSeed()">Random</button>
+            </label>
+        </div>
+        <div style="display: inline-flex;">
+            <div>
+                <label>
+                    <input id="voltaris" type="radio" name="color" checked>
+                    Voltaris
+                </label>
+            </div>
+            <div>
+                <label>
+                    <input id="sendaris" type="radio" name="color">
+                    Sendaris
+                </label>
+            </div>
+            <div>
+                <label>
+                    <input id="mendoris" type="radio" name="color">
+                    Mendoris
+                </label>
+            </div>
+            <div>
+                <label>
+                    <input id="nestoris" type="radio" name="color">
+                    Nestoris
+                </label>
+            </div>
+            <div>
+                <label>
+                    <input id="kaltaris" type="radio" name="color">
+                    Kaltaris
+                </label>
+            </div>
+            <div>
+                <label>
+                    <input id="custom" type="radio" name="color">
+                    Custom:&nbsp;
+                    <input id="marker_color" type="color">
+                </label>
+            </div>
+        </div>
+    </div>
+    <div>
+        <button onclick="reloadSkin()">Generate</button>
+    </div>
+    <canvas id="skin_container" width="640" height="640"></canvas>
+    <div>
+        <b>Tip: You can rotate it by dragging.</b>
+    </div>
+    <canvas id="generate" width="64" height="64" title="generate"></canvas>
+    <canvas id="marker" width="64" height="64" title="marker"></canvas>
+    <canvas id="skin" width="64" height="64" title="skin"></canvas>
+    <div>Copyright @IAFEnvoy, All Right Reserved</div>
+</body>
+
+</html>
