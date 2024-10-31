@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "build": "npm run vite build"
+    "build": "vite build"
   },
   "dependencies": {
     "skinview3d": "^3.1.0",
