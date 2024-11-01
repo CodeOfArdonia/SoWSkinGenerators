@@ -59,7 +59,7 @@ const reloadSkin = window.reloadSkin = async () => {
     let beginTime = +new Date()
     if (beginTime - lastGenTime < 50) return
     let darkness = document.getElementById('darkness').value * 0xFF
-    skinViewer.loadSkin(await generateSkin([darkness, darkness, darkness, 0xFF], getColor(), getAge(), document.getElementById('female').checked, +document.getElementById('seed').value))
+    skinViewer.loadSkin(await generateSkin([darkness, darkness, darkness, 0xFF], getColor(), +document.getElementById('seed').value, getAge(), document.getElementById('female').checked, document.getElementById('shadow').checked))
     let endTime = lastGenTime = +new Date()
     document.getElementById('time').innerHTML = `Generate Time: ${endTime - beginTime}ms`
 }
@@ -69,7 +69,7 @@ const randomSeed = window.randomSeed = () => {
     reloadSkin()
 }
 
-const generateSkin = async (skinColor, markerColor, age, female, seed) => {
+const generateSkin = async (skinColor, markerColor, seed, age, female, shadow) => {
     if (age < 1 || age > 5) throw 'age must in 1~5!'
     let generateCanvas = document.getElementById('generate')
     let markerCanvas = document.getElementById('marker')
@@ -77,12 +77,15 @@ const generateSkin = async (skinColor, markerColor, age, female, seed) => {
     let generateCtx = generateCanvas.getContext('2d')
     let markerCtx = markerCanvas.getContext('2d')
     let skinCtx = skinCanvas.getContext('2d')
+    console.log(skinColor, markerColor, seed, age, female, shadow)
     //Clear
     clearCanvas(generateCtx)
     clearCanvas(markerCtx)
     clearCanvas(skinCtx)
     //Draw
     await drawImage([skinCtx], './img/ardoni_base.png', skinColor)
+    if (shadow)
+        await drawImage([skinCtx, markerCtx], `./img/ardoni_shadow.png`, skinColor)
     await drawImage([skinCtx, generateCtx, markerCtx], new ArdoniMarkerGenerator(seed).generate(), markerColor)
     await drawImage([skinCtx], `./img/ardoni_eye_${female ? 'female' : 'male'}.png`, skinColor)
     await drawImage([skinCtx, markerCtx], `./img/ardoni_pupil_${female ? 'female' : 'male'}.png`, markerColor)
@@ -97,7 +100,7 @@ const generateSkin = async (skinColor, markerColor, age, female, seed) => {
 
 const clearCanvas = (ctx) => {
     let imageData = ctx.createImageData(64, 64)
-    for (let i = 0; i < 640 * 640; i++) imageData.data[i * 4 + 3] = 0
+    for (let i = 0; i < 64 * 64; i++) imageData.data[i * 4 + 3] = 0
     ctx.putImageData(imageData, 0, 0)
 }
 
