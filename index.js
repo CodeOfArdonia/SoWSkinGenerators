@@ -57,7 +57,7 @@ window.onDarknessChange = () => {
 let lastGenTime = 0
 const reloadSkin = window.reloadSkin = async () => {
     let beginTime = +new Date()
-    if (beginTime - lastGenTime < 100) return
+    if (beginTime - lastGenTime < 50) return
     let darkness = document.getElementById('darkness').value * 0xFF
     skinViewer.loadSkin(await generateSkin([darkness, darkness, darkness, 0xFF], getColor(), getAge(), document.getElementById('female').checked, +document.getElementById('seed').value))
     let endTime = lastGenTime = +new Date()

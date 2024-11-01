@@ -5,19 +5,9 @@
     <meta charset="UTF-8">
     <title>Ardoni Skin Generator</title>
     <script src="index.js" type="module"></script>
-    <style>
-        #canvas {
-            border: 1px solid black;
-            image-rendering: pixelated;
-        }
-
-        .color-picker {
-            margin: 10px;
-        }
-    </style>
 </head>
 
-<body style="text-align: center;">
+<body style="text-align: center;user-select: none;">
     <h1>Ardoni Skin Generator</h1>
     <br>
     <div>
@@ -32,7 +22,7 @@
         <div>
             <label>
                 Seed:&nbsp;
-                <input id="seed" type="number" value="0">
+                <input id="seed" type="number" oninput="reloadSkin()" onchange="reloadSkin()">
                 <button onclick="randomSeed()">Random</button>
             </label>
         </div>
@@ -70,7 +60,8 @@
     <canvas id="generate" width="64" height="64" title="generate"></canvas>
     <canvas id="marker" width="64" height="64" title="marker"></canvas>
     <canvas id="skin" width="64" height="64" title="skin"></canvas>
-    <div>Copyright @IAFEnvoy, All Right Reserved</div>
+    <div>Copyright @IAFEnvoy <a href="https://github.com/ArkTechMC/ArdoniSkinGenerator/blob/main/LICENSE">All Right Reserved</a></div>
+    <div>Ad: <a href="https://modrinth.com/modpack/songs-of-war-rpg">Check out my SoW Modpack!</a></div>
     <!--Render Infos-->
     <script type="module" src="https://unpkg.com/stats.js@0.17.0/src/Stats.js"
         integrity="sha384-W71K+d2HbqXqQWSj3Vj4RDsIVvIV7lR8O6RArKAiqB39ntwLci0W08qOn4Z1n8sM" crossorigin="anonymous"
