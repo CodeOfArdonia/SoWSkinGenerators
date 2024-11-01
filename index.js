@@ -1,18 +1,32 @@
 //Copyright @IAFEnvoy, All Right Reserved
-import { SkinViewer, WalkingAnimation } from 'skinview3d'
-
-let skinViewer
-window.onload = async _ => {
-    randomSeed()
-    skinViewer = new SkinViewer({
-        canvas: document.getElementById("skin_container"),
-        width: 480,
-        height: 480
+let skinViewer, availableAnimations
+window.onload = _ => {
+    import('skinview3d').then(async skinview3d => {
+        availableAnimations = {
+            idle: new skinview3d.IdleAnimation(),
+            walk: new skinview3d.WalkingAnimation(),
+            run: new skinview3d.RunningAnimation(),
+            fly: new skinview3d.FlyingAnimation(),
+            wave: new skinview3d.WaveAnimation(),
+        };
+        skinViewer = new skinview3d.SkinViewer({
+            canvas: document.getElementById("skin_container"),
+            width: 480,
+            height: 480
+        })
+        skinViewer.zoom = 0.8
+        setAnimation()
+        skinViewer.animation.speed = 1
+        randomSeed()
     })
-    skinViewer.zoom = 0.8
-    skinViewer.animation = new WalkingAnimation()
-    skinViewer.animation.speed = 1
-    await reloadSkin()
+}
+
+const setAnimation = window.setAnimation = () => {
+    for (let n of Object.keys(availableAnimations))
+        if (document.getElementById(n).checked) {
+            skinViewer.animation = availableAnimations[n]
+            return
+        }
 }
 
 const getAge = () => {
@@ -33,13 +47,29 @@ const getColor = () => {
     return parseColorString(document.getElementById(`marker_color`).value)
 }
 
-const reloadSkin = window.reloadSkin = async () => {
-    skinViewer.loadSkin(await generateSkin(getColor(), getAge(), document.getElementById('female').checked, +document.getElementById('seed').value))
+window.onDarknessChange = () => {
+    let i = document.getElementById('darkness')
+    i.value = Math.floor(i.value * 100) / 100
+    document.getElementById('darkness_value').innerHTML = i.value
+    reloadSkin()
 }
 
-const randomSeed = window.randomSeed = () => document.getElementById('seed').value = Math.floor(Math.random() * Math.pow(2, 50))
+let lastGenTime = 0
+const reloadSkin = window.reloadSkin = async () => {
+    let beginTime = +new Date()
+    if (beginTime - lastGenTime < 100) return
+    let darkness = document.getElementById('darkness').value * 0xFF
+    skinViewer.loadSkin(await generateSkin([darkness, darkness, darkness, 0xFF], getColor(), getAge(), document.getElementById('female').checked, +document.getElementById('seed').value))
+    let endTime = lastGenTime = +new Date()
+    document.getElementById('time').innerHTML = `Generate Time: ${endTime - beginTime}ms`
+}
 
-const generateSkin = async (color, age, female, seed) => {
+const randomSeed = window.randomSeed = () => {
+    document.getElementById('seed').value = Math.floor(Math.random() * Math.pow(2, 50))
+    reloadSkin()
+}
+
+const generateSkin = async (skinColor, markerColor, age, female, seed) => {
     if (age < 1 || age > 5) throw 'age must in 1~5!'
     let generateCanvas = document.getElementById('generate')
     let markerCanvas = document.getElementById('marker')
@@ -52,14 +82,14 @@ const generateSkin = async (color, age, female, seed) => {
     clearCanvas(markerCtx)
     clearCanvas(skinCtx)
     //Draw
-    await drawImage([skinCtx], './img/ardoni_base.png')
-    await drawImage([skinCtx, generateCtx, markerCtx], new ArdoniMarkerGenerator(seed).generate(), color)
-    await drawImage([skinCtx], `./img/ardoni_eye_${female ? 'female' : 'male'}.png`)
-    await drawImage([skinCtx, markerCtx], `./img/ardoni_pupil_${female ? 'female' : 'male'}.png`, color)
-    await drawImage([skinCtx], `./img/ardoni_hair_${age}.png`)
-    await drawImage([skinCtx, markerCtx], `./img/ardoni_hair_${age}_marker.png`, color)
+    await drawImage([skinCtx], './img/ardoni_base.png', skinColor)
+    await drawImage([skinCtx, generateCtx, markerCtx], new ArdoniMarkerGenerator(seed).generate(), markerColor)
+    await drawImage([skinCtx], `./img/ardoni_eye_${female ? 'female' : 'male'}.png`, skinColor)
+    await drawImage([skinCtx, markerCtx], `./img/ardoni_pupil_${female ? 'female' : 'male'}.png`, markerColor)
+    await drawImage([skinCtx], `./img/ardoni_hair_${age}.png`, skinColor)
+    await drawImage([skinCtx, markerCtx], `./img/ardoni_hair_${age}_marker.png`, markerColor)
     if (female)
-        await drawImage([skinCtx, markerCtx], `./img/ardoni_hair_female_extra.png`, color)
+        await drawImage([skinCtx, markerCtx], `./img/ardoni_hair_female_extra.png`, markerColor)
     let image = new Image(64, 64)
     image.src = skinCanvas.toDataURL("image/png")
     return image
@@ -83,11 +113,10 @@ const applyColor = async (url, color) => {
     let data = imageData.data
     for (let i = 0; i < data.length; i += 4) {
         if (data[i + 3] < 10) continue
-        let c = colorBlend([data[i], data[i + 1], data[i + 2], data[i + 3]], color, 0.7)
-        data[i] = c[0]
-        data[i + 1] = c[1]
-        data[i + 2] = c[2]
-        data[i + 3] = c[3]
+        data[i] *= color[0] / 0xFF
+        data[i + 1] *= color[1] / 0xFF
+        data[i + 2] *= color[2] / 0xFF
+        data[i + 3] *= color[3] / 0xFF
     }
     ctx.putImageData(imageData, 0, 0);
     return canvas.toDataURL('image/png')
@@ -206,13 +235,4 @@ class SeededRandom {
     nextInt(min, max) {
         return min + Math.floor(this.random() * (max - min + 1))
     }
-}
-
-const colorBlend = (c1, c2, ratio) => {
-    ratio = Math.max(Math.min(Number(ratio), 1), 0)
-    let r = Math.round(c1[0] * (1 - ratio) + c2[0] * ratio)
-    let g = Math.round(c1[1] * (1 - ratio) + c2[1] * ratio)
-    let b = Math.round(c1[2] * (1 - ratio) + c2[2] * ratio)
-    let a = Math.round(c1[3] * (1 - ratio) + c2[3] * ratio)
-    return [r, g, b, a]
 }
