@@ -77,7 +77,7 @@ const generateSkin = async (skinColor, markerColor, seed, age, female, shadow) =
     let skinCanvas = document.getElementById('skin')
     let generateCtx = generateCanvas.getContext('2d')
     let markerCtx = markerCanvas.getContext('2d')
-    let skinNoEyeCtx = markerCanvas.getContext('2d')
+    let skinNoEyeCtx = skinNoEyeCanvas.getContext('2d')
     let skinCtx = skinCanvas.getContext('2d')
     console.log(skinColor, markerColor, seed, age, female, shadow)
     //Clear
