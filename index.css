@@ -1,0 +1,28 @@
+body {
+    text-align: center;
+}
+
+.button {
+    position: absolute;
+    padding: 5px;
+    background-color: white;
+    border-style: solid;
+    border-color: aqua;
+    border-width: 5px;
+    border-radius: 5px;
+    font-size: 30px;
+    left: 10%;
+    width: 80%;
+    height: 50px;
+    line-height: 50px;
+    margin: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease-out;
+}
+
+.button:hover {
+    margin: 0px;
+    width: calc(80% + 20px);
+    height: 70px;
+    line-height: 70px;
+}

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Magnorite Skin Generator</title>
+    <script src="magnorite.js" type="module"></script>
+    <link rel="icon" href="logo.webp" type="image/x-icon">
+</head>
+
+<body style="text-align: center;user-select: none;">
+    <h1>Magnorite Skin Generator</h1>
+    <h3>Beta Testing</h3>
+    <div>Ads: <a href="https://modrinth.com/modpack/songs-of-war-rpg" target="_blank">Check out our SoW Modpack!</a>
+    </div>
+    <div>
+        <div>
+            <label>
+                Seed:&nbsp;
+                <input id="seed" type="number" oninput="reloadSkin()" onchange="reloadSkin()">
+                <button onclick="randomSeed()">Random</button>
+            </label>
+        </div>
+        <div>
+            Eye Color:
+            <input id="eye_color" type="color" value="#FFDB9E" style="position: relative;height:20px" onchange="reloadSkin()">
+        </div>
+        <div style="display: inline-flex;">
+            Block Size:&nbsp;
+            <input id="block_size" type="range" min="-1.5" max="0.5" step="0.001" value="-0.5"
+                oninput="onBlockSizeChange()" onchange="onBlockSizeChange()">
+            <div id="block_size_value">-0.5</div>
+        </div>
+    </div>
+    <div id="time"></div>
+    <canvas id="skin_container" width="640" height="640"></canvas>
+    <br>
+    <div style="display: inline-flex;" onclick="setAnimation()">
+        <div> <label> <input id="idle" type="radio" name="animation">Idle </label> </div>
+        <div> <label> <input id="walk" type="radio" name="animation" checked> Walk</label> </div>
+        <div> <label> <input id="run" type="radio" name="animation"> Run </label> </div>
+        <div> <label> <input id="fly" type="radio" name="animation"> Fly </label> </div>
+        <div> <label> <input id="wave" type="radio" name="animation">Wave </label> </div>
+    </div>
+    <br>
+    <div> <b>Tip: You can rotate it by dragging.</b> </div>
+    <canvas id="marker" width="64" height="64" title="marker"></canvas>
+    <canvas id="skin" width="64" height="64" title="skin"></canvas>
+    <div>Copyright
+        <a href="https://www.ardonia.com">Code of Ardonia</a>,
+        <a href="https://github.com/CodeOfArdonia/ArdoniSkinGenerator/blob/main/LICENSE">All Right Reserved</a>
+    </div>
+    <!--Render Infos-->
+    <script type="module" src="https://unpkg.com/stats.js@0.17.0/src/Stats.js"
+        integrity="sha384-W71K+d2HbqXqQWSj3Vj4RDsIVvIV7lR8O6RArKAiqB39ntwLci0W08qOn4Z1n8sM" crossorigin="anonymous"
+        async></script>
+    <script type="module" async>
+        import Stats from "https://unpkg.com/stats.js@0.17.0/src/Stats.js";
+        const stats = new Stats();
+        stats.dom.style.left = "";
+        stats.dom.style.right = "0";
+        document.body.appendChild(stats.dom);
+        function loop() {
+            stats.update();
+            requestAnimationFrame(loop);
+        }
+        requestAnimationFrame(loop);
+    </script>
+</body>
+
+</html>

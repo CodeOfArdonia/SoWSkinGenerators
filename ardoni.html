@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Ardoni Skin Generator</title>
+    <script src="ardoni.js" type="module"></script>
+    <link rel="icon" href="logo.webp" type="image/x-icon">
+</head>
+
+<body style="text-align: center;user-select: none;">
+    <h1>Ardoni Skin Generator</h1>
+    <div>Ads: <a href="https://modrinth.com/modpack/songs-of-war-rpg" target="_blank">Check out our SoW Modpack!</a>
+    </div>
+    <br>
+    <div>
+        <div>
+            <label>
+                Seed:&nbsp;
+                <input id="seed" type="number" oninput="reloadSkin()" onchange="reloadSkin()">
+                <button onclick="randomSeed()">Random</button>
+            </label>
+        </div>
+        <div style="display: inline-flex;">
+            Age:&nbsp;
+            <div> <label> <input id="age_1" type="radio" name="age" onchange="reloadSkin()" checked> 0-50 </label>
+            </div>
+            <div> <label> <input id="age_2" type="radio" name="age" onchange="reloadSkin()"> 50-100 </label> </div>
+            <div> <label> <input id="age_3" type="radio" name="age" onchange="reloadSkin()"> 100-150 </label> </div>
+            <div> <label> <input id="age_4" type="radio" name="age" onchange="reloadSkin()"> 150-200 </label> </div>
+            <div> <label> <input id="age_5" type="radio" name="age" onchange="reloadSkin()"> 200-250 </label> </div>
+        </div> <br>
+        <div style="display: inline-flex;" onclick="reloadSkin()">
+            <div> <label> <input id="voltaris" type="radio" name="color" checked> Voltaris </label> </div>
+            <div> <label> <input id="sendaris" type="radio" name="color"> Sendaris </label> </div>
+            <div> <label> <input id="mendoris" type="radio" name="color"> Mendoris </label> </div>
+            <div> <label> <input id="nestoris" type="radio" name="color"> Nestoris </label> </div>
+            <div> <label> <input id="kaltaris" type="radio" name="color"> Kaltaris </label> </div>
+            <div> <label> <input id="custom" type="radio" name="color"> Custom:&nbsp;
+                    <input id="marker_color" type="color" style="position: relative;top:-5px;height:20px"
+                        onchange="document.getElementById('custom').checked=true;reloadSkin()">
+                </label> </div>
+        </div> <br>
+        <div style="display: inline-flex;">
+            Darkness:&nbsp;
+            <input id="darkness" type="range" min="0.5" max="1.5" step="0.001" value="1" oninput="onDarknessChange()"
+                onchange="onDarknessChange()">
+            <div id="darkness_value">1</div>
+            <label> <input id="female" type="checkbox" onchange="reloadSkin()"> Female </label>
+            <label> <input id="shadow" type="checkbox" onchange="reloadSkin()"> Shadow </label>
+        </div>
+    </div>
+    <div id="time"></div>
+    <canvas id="skin_container" width="640" height="640"></canvas>
+    <br>
+    <div style="display: inline-flex;" onclick="setAnimation()">
+        <div> <label> <input id="idle" type="radio" name="animation">Idle </label> </div>
+        <div> <label> <input id="walk" type="radio" name="animation" checked> Walk</label> </div>
+        <div> <label> <input id="run" type="radio" name="animation"> Run </label> </div>
+        <div> <label> <input id="fly" type="radio" name="animation"> Fly </label> </div>
+        <div> <label> <input id="wave" type="radio" name="animation">Wave </label> </div>
+    </div>
+    <br>
+    <div> <b>Tip: You can rotate it by dragging.</b> </div>
+    <canvas id="generate" width="64" height="64" title="generate"></canvas>
+    <canvas id="marker" width="64" height="64" title="marker"></canvas>
+    <canvas id="skin-no-eye" width="64" height="64" title="skin-no-eye"></canvas>
+    <canvas id="skin" width="64" height="64" title="skin"></canvas>
+    <div>Copyright
+        <a href="https://www.ardonia.com">Code of Ardonia</a>,
+        <a href="https://github.com/CodeOfArdonia/ArdoniSkinGenerator/blob/main/LICENSE">All Right Reserved</a>
+    </div>
+    <!--Render Infos-->
+    <script type="module" src="https://unpkg.com/stats.js@0.17.0/src/Stats.js"
+        integrity="sha384-W71K+d2HbqXqQWSj3Vj4RDsIVvIV7lR8O6RArKAiqB39ntwLci0W08qOn4Z1n8sM" crossorigin="anonymous"
+        async></script>
+    <script type="module" async>
+        import Stats from "https://unpkg.com/stats.js@0.17.0/src/Stats.js";
+        const stats = new Stats();
+        stats.dom.style.left = "";
+        stats.dom.style.right = "0";
+        document.body.appendChild(stats.dom);
+        function loop() {
+            stats.update();
+            requestAnimationFrame(loop);
+        }
+        requestAnimationFrame(loop);
+    </script>
+</body>
+
+</html>

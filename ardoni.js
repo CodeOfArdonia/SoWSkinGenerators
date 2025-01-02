@@ -1,4 +1,7 @@
 //Copyright @IAFEnvoy, All Right Reserved
+import SeededRandom from './SeededRandom'
+import { clearCanvas, applyColor, drawImage, setPoint, parseColorString } from './util'
+
 let skinViewer, availableAnimations
 window.onload = _ => {
     import('skinview3d').then(async skinview3d => {
@@ -35,8 +38,6 @@ const getAge = () => {
             return i
     return 1
 }
-
-const parseColorString = (c1) => [parseInt(c1.substring(1, 3), 16), parseInt(c1.substring(3, 5), 16), parseInt(c1.substring(5, 7), 16), 0xFF]
 
 const getColor = () => {
     if (document.getElementById(`voltaris`).checked) return [0xFF, 0, 0, 0xFF]
@@ -101,40 +102,6 @@ const generateSkin = async (skinColor, markerColor, seed, age, female, shadow) =
     return image
 }
 
-const clearCanvas = (ctx) => {
-    let imageData = ctx.createImageData(64, 64)
-    for (let i = 0; i < 64 * 64; i++) imageData.data[i * 4 + 3] = 0
-    ctx.putImageData(imageData, 0, 0)
-}
-
-const applyColor = async (url, color) => {
-    if (!color) return url
-    let img = new Image(64, 64)
-    img.src = url
-    await new Promise((resolve, _) => img.onload = _ => resolve())
-    let canvas = document.createElement('canvas')
-    let ctx = canvas.getContext('2d')
-    ctx.drawImage(img, 0, 0)
-    let imageData = ctx.getImageData(0, 0, 64, 64)
-    let data = imageData.data
-    for (let i = 0; i < data.length; i += 4) {
-        if (data[i + 3] < 10) continue
-        data[i] *= color[0] / 0xFF
-        data[i + 1] *= color[1] / 0xFF
-        data[i + 2] *= color[2] / 0xFF
-        data[i + 3] *= color[3] / 0xFF
-    }
-    ctx.putImageData(imageData, 0, 0);
-    return canvas.toDataURL('image/png')
-}
-
-const drawImage = async (ctxes, url, color) => {
-    let img = new Image(64, 64)
-    img.src = await applyColor(url, color)
-    await new Promise((resolve, _) => img.onload = _ => resolve())
-    ctxes.forEach(ctx => ctx.drawImage(img, 0, 0))
-}
-
 const BODY_OFFSET_X = 0, BODY_OFFSET_Y = 20
 const LEGS_OFFSET_X = 16, LEGS_OFFSET_Y = 52
 class ArdoniMarkerGenerator {
@@ -151,18 +118,11 @@ class ArdoniMarkerGenerator {
         let r = this.random.nextInt(0xC0, 0x100)
         return [r, r, r, 0xFF]
     }
-    setPoint(x, y, color) {
-        let index = (y * 64 + x) * 4
-        this.imageData.data[index] = color[0]   // R
-        this.imageData.data[index + 1] = color[1]  // G
-        this.imageData.data[index + 2] = color[2]  // B
-        this.imageData.data[index + 3] = color[3]  // 不透明
-    }
     fill(offsetX, offsetY, map) {
         for (let i = 0; i < map.length; i++)
             for (let j = 0; j < map[i].length; j++)
-                if (map[i][j]) this.setPoint(offsetX + i, offsetY + j, this.generateColor())
-                else this.setPoint(offsetX + i, offsetY + j, [0, 0, 0, 0])
+                if (map[i][j]) setPoint(this.imageData, offsetX + i, offsetY + j, this.generateColor())
+                else setPoint(this.imageData, offsetX + i, offsetY + j, [0, 0, 0, 0])
     }
     generate() {
         if (!this.present) {
@@ -217,28 +177,5 @@ class ArdoniLikeBooleanMapGenerator {
                     })
         }
         return data
-    }
-}
-
-class SeededRandom {
-    constructor(seed) {
-        this.seed = seed;
-        this.modulus = 0xFFFFFFFF;
-        this.multiplier = 0x5DEECE66D;
-        this.increment = 0xB;
-        this.current = this.seed;
-    }
-
-    random() {
-        this.current = (this.current * this.multiplier + this.increment) % this.modulus;
-        return this.current / this.modulus; // 返回 0 到 1 之间的数
-    }
-
-    nextLong() {
-        return Math.floor(this.random() * Math.pow(2, 63))
-    }
-
-    nextInt(min, max) {
-        return min + Math.floor(this.random() * (max - min + 1))
     }
 }
