@@ -1,6 +1,6 @@
 //Copyright @IAFEnvoy, All Right Reserved
 import SeededRandom from './SeededRandom'
-import { clearCanvas, applyColor, drawImage, setPoint, parseColorString } from './util'
+import { clearCanvas, drawImage, setPoint, parseColorString } from './util'
 
 let skinViewer, availableAnimations
 window.onload = _ => {
@@ -87,16 +87,16 @@ const generateSkin = async (skinColor, markerColor, seed, age, female, shadow) =
     clearCanvas(skinNoEyeCtx)
     clearCanvas(skinCtx)
     //Draw
-    await drawImage([skinCtx, skinNoEyeCtx], './img/ardoni_base.png', skinColor)
+    await drawImage([skinCtx, skinNoEyeCtx], './img/ardoni/ardoni_base.png', skinColor)
     if (shadow)
-        await drawImage([skinCtx, markerCtx, skinNoEyeCtx], `./img/ardoni_shadow.png`, skinColor)
+        await drawImage([skinCtx, markerCtx, skinNoEyeCtx], `./img/ardoni/ardoni_shadow.png`, skinColor)
     await drawImage([skinCtx, generateCtx, markerCtx, skinNoEyeCtx], new ArdoniMarkerGenerator(seed).generate(), markerColor)
-    await drawImage([skinCtx], `./img/ardoni_eye_${female ? 'female' : 'male'}.png`, skinColor)
-    await drawImage([skinCtx, markerCtx], `./img/ardoni_pupil_${female ? 'female' : 'male'}.png`, markerColor)
-    await drawImage([skinCtx, skinNoEyeCtx], `./img/ardoni_hair_${age}.png`, skinColor)
-    await drawImage([skinCtx, markerCtx, skinNoEyeCtx], `./img/ardoni_hair_${age}_marker.png`, markerColor)
+    await drawImage([skinCtx], `./img/ardoni/ardoni_eye_${female ? 'female' : 'male'}.png`, skinColor)
+    await drawImage([skinCtx, markerCtx], `./img/ardoni/ardoni_pupil_${female ? 'female' : 'male'}.png`, markerColor)
+    await drawImage([skinCtx, skinNoEyeCtx], `./img/ardoni/ardoni_hair_${age}.png`, skinColor)
+    await drawImage([skinCtx, markerCtx, skinNoEyeCtx], `./img/ardoni/ardoni_hair_${age}_marker.png`, markerColor)
     if (female)
-        await drawImage([skinCtx, markerCtx, skinNoEyeCtx], `./img/ardoni_hair_female_extra.png`, markerColor)
+        await drawImage([skinCtx, markerCtx, skinNoEyeCtx], `./img/ardoni/ardoni_hair_female_extra.png`, markerColor)
     let image = new Image(64, 64)
     image.src = skinCanvas.toDataURL("image/png")
     return image

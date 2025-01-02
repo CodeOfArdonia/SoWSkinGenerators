@@ -2,27 +2,35 @@ body {
     text-align: center;
 }
 
-.button {
-    position: absolute;
+.card {
     padding: 5px;
     background-color: white;
     border-style: solid;
-    border-color: aqua;
+    border-color: lightgray;
     border-width: 5px;
     border-radius: 5px;
     font-size: 30px;
     left: 10%;
-    width: 80%;
-    height: 50px;
     line-height: 50px;
     margin: 10px;
     cursor: pointer;
     transition: all 0.2s ease-out;
+    width: 30%;
 }
 
-.button:hover {
-    margin: 0px;
-    width: calc(80% + 20px);
-    height: 70px;
-    line-height: 70px;
+.card:hover {
+    border-color: gray;
+}
+
+.tumbnail {
+    width: 200px;
+    height: 300px;
+}
+
+.link-group {
+    justify-content: center;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    display: flex;
 }
