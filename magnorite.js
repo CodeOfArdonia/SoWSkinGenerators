@@ -38,12 +38,15 @@ const randomSeed = window.randomSeed = () => {
 }
 
 const generateSkin = window.generateSkin = async (seed, eyeColor, blockSize) => {
-    let skinCanvas = document.getElementById('skin')
-    let skinCtx = skinCanvas.getContext('2d')
     let markerCanvas = document.getElementById('marker')
     let markerCtx = markerCanvas.getContext('2d')
+    let skinCanvas = document.getElementById('skin')
+    let skinCtx = skinCanvas.getContext('2d')
+    let skinNoEyeCanvas = document.getElementById('skinNoEye')
+    let skinNoEyeCtx = skinNoEyeCanvas.getContext('2d')
     let skinData = skinCtx.createImageData(64, 64)
     let markerData = markerCtx.createImageData(64, 64)
+    let skinNoEyeData = skinNoEyeCtx.createImageData(64, 64)
 
     let lavaMap = generateColors(seed, 0.2, [
         { diff: 8, loud: 0.5 },
@@ -51,8 +54,9 @@ const generateSkin = window.generateSkin = async (seed, eyeColor, blockSize) => 
         { diff: 3, loud: 0.125 },
         { diff: 1, loud: 0.0625 },
     ], h => interpolateColor([0xff, 0x45, 0x00, 0xff], [0xff, 0xff, 0x00, 0xff], h))
-    fill(skinData, lavaMap, inFirstLayer)
     fill(markerData, lavaMap, inFirstLayer)
+    fill(skinNoEyeData, lavaMap, inFirstLayer)
+    fill(skinData, lavaMap, inFirstLayer)
 
     let carveColor = generateColors(seed + 1, 0, [
         { diff: 1, loud: 0.75 },
@@ -66,18 +70,26 @@ const generateSkin = window.generateSkin = async (seed, eyeColor, blockSize) => 
     ], h => h > 0 ? [0xff, 0xff, 0xff, 0xff] : [0, 0, 0, 0])
     let firstLayer = createEmpty(), secondLayer = createEmpty()
     resolveCarve(carveColor, carve, firstLayer, secondLayer)
-    fill(skinData, firstLayer, inFirstLayer)
+
     fill(markerData, firstLayer, inFirstLayer, [0, 0, 0, 0])
+    fill(skinNoEyeData, firstLayer, inFirstLayer)
+    fill(skinData, firstLayer, inFirstLayer)
+
+    fill(skinNoEyeData, secondLayer, inSecondLayer)
     fill(skinData, secondLayer, inSecondLayer)
-    fill(skinData, carveColor, isFirstFace)
+
     fill(markerData, carveColor, isFirstFace, [0, 0, 0, 0])
+    fill(skinNoEyeData, carveColor, isFirstFace)
+    fill(skinData, carveColor, isFirstFace)
+
     setPoint(skinData, 9, 11, [0x30, 0x27, 0x1F, 0xFF])
     setPoint(skinData, 14, 11, [0x30, 0x27, 0x1F, 0xFF])
     setPoint(skinData, 10, 11, eyeColor)
     setPoint(skinData, 13, 11, eyeColor)
 
-    skinCtx.putImageData(skinData, 0, 0)
     markerCtx.putImageData(markerData, 0, 0)
+    skinCtx.putImageData(skinData, 0, 0)
+    skinNoEyeCtx.putImageData(skinNoEyeData, 0, 0)
     let image = new Image(64, 64)
     image.src = skinCanvas.toDataURL("image/png")
     return image
