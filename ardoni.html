@@ -61,11 +61,14 @@
         <div> <label> <input id="wave" type="radio" name="animation">Wave </label> </div>
     </div>
     <br>
-    <div> <b>Tip: You can rotate it by dragging.</b> </div>
-    <canvas id="generate" width="64" height="64" title="generate"></canvas>
-    <canvas id="marker" width="64" height="64" title="marker"></canvas>
-    <canvas id="skin-no-eye" width="64" height="64" title="skin-no-eye"></canvas>
-    <canvas id="skin" width="64" height="64" title="skin"></canvas>
+    <div>
+         <b>Tip: 1.You can rotate it by dragging.</b> 
+         <b>2.Click the skin image below to download.</b> 
+    </div>
+    <canvas onclick="saveCanvas(this)" id="generate" width="64" height="64" title="generate"></canvas>
+    <canvas onclick="saveCanvas(this)" id="marker" width="64" height="64" title="marker"></canvas>
+    <canvas onclick="saveCanvas(this)" id="skin-no-eye" width="64" height="64" title="skin-no-eye"></canvas>
+    <canvas onclick="saveCanvas(this)" id="skin" width="64" height="64" title="skin"></canvas>
     <div>Copyright
         <a href="https://www.ardonia.net">Code of Ardonia</a>,
         <a href="https://github.com/CodeOfArdonia/ArdoniSkinGenerator/blob/main/LICENSE">All Right Reserved</a>

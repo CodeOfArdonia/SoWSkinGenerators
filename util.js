@@ -96,3 +96,16 @@ const average = (colorMap, i, j) => {
 }
 
 export const parseColorString = (c1) => [parseInt(c1.substring(1, 3), 16), parseInt(c1.substring(3, 5), 16), parseInt(c1.substring(5, 7), 16), 0xFF]
+
+export const downloadCanvas = canvas => {
+    let filename = new Date().toLocaleDateString() + '.png'
+    let imgdata = canvas.toDataURL()
+    let link = document.createElement('a')
+    link.href = imgdata
+    link.download = filename
+    let event = document.createEvent('MouseEvents')
+    event.initMouseEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null)
+    link.dispatchEvent(event)
+}
+
+window.saveCanvas = canvas => downloadCanvas(canvas)

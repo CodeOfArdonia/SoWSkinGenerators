@@ -50,7 +50,6 @@ function hashCode(str) {
     return hash
 }
 
-
 /**
  * 二维噪音类
  */
@@ -131,8 +130,6 @@ class Noise2D {
         let n4 = this.getCoreNoise(...p4)
         return n1 * (qLeft * qTop) + n2 * (qRight * qTop) + n3 * (qLeft * qDown) + n4 * (qRight * qDown)
     }
-
-
 }
 
 export default class Ground2D {
