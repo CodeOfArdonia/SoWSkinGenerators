@@ -6,14 +6,15 @@
     <title>Magnorite Skin Generator</title>
     <script src="magnorite.js" type="module"></script>
     <link rel="icon" href="logo.webp" type="image/x-icon">
+    <link rel="stylesheet" href="index.css">
 </head>
 
-<body style="text-align: center;user-select: none;">
+<body>
     <h1>Magnorite Skin Generator</h1>
     <h3>Beta Testing</h3>
     <div>Ads: <a href="https://modrinth.com/modpack/songs-of-war-rpg" target="_blank">Check out our SoW Modpack!</a>
     </div>
-    <br>
+    <div id="time"></div>
     <div>
         <div>
             <label>
@@ -24,7 +25,8 @@
         </div>
         <div>
             Eye Color:
-            <input id="eye_color" type="color" value="#FFDB9E" style="position: relative;height:20px" onchange="reloadSkin()">
+            <input id="eye_color" type="color" value="#FFDB9E" style="position: relative;height:20px"
+                onchange="reloadSkin()">
         </div>
         <div style="display: inline-flex;">
             Block Size:&nbsp;
@@ -33,8 +35,7 @@
             <div id="block_size_value">-0.5</div>
         </div>
     </div>
-    <div id="time"></div>
-    <canvas id="skin_container" width="640" height="640"></canvas>
+    <canvas id="skin_container" width="480" height="480"></canvas>
     <br>
     <div style="display: inline-flex;" onclick="setAnimation()">
         <div> <label> <input id="idle" type="radio" name="animation">Idle </label> </div>
@@ -45,15 +46,16 @@
     </div>
     <br>
     <div>
-         <b>Tip: 1.You can rotate it by dragging.</b> 
-         <b>2.Click the skin image below to download.</b> 
+        <b>Tip: 1.You can rotate it by dragging.</b>
+        <br>
+        <b>2.Click the skin image below to download.</b>
     </div>
     <canvas onclick="saveCanvas(this)" id="marker" width="64" height="64" title="marker"></canvas>
     <canvas onclick="saveCanvas(this)" id="skinNoEye" width="64" height="64" title="skinNoEye"></canvas>
     <canvas onclick="saveCanvas(this)" id="skin" width="64" height="64" title="skin"></canvas>
-    <div>Copyright
-        <a href="https://www.ardonia.net">Code of Ardonia</a>,
-        <a href="https://github.com/CodeOfArdonia/ArdoniSkinGenerator/blob/main/LICENSE">All Right Reserved</a>
+    <div>
+        Copyright <a href="https://www.ardonia.net">Code of Ardonia</a>,
+        <a href="https://github.com/CodeOfArdonia/SoWSkinGenerators/blob/main/LICENSE">All Right Reserved</a>
     </div>
     <!--Render Infos-->
     <script type="module" src="https://unpkg.com/stats.js@0.17.0/src/Stats.js"

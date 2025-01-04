@@ -1,5 +1,10 @@
 body {
     text-align: center;
+    user-select: none;
+}
+
+canvas {
+    cursor: pointer;
 }
 
 .card {
